@@ -3,8 +3,7 @@
 This project is forked from https://github.com/espressif/esp-idf-cxx and provides C++ wrapper classes around some components of [esp-idf](https://github.com/espressif/esp-idf). It is organized as a component for the [IDF component manager](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/tools/idf-component-manager.html). You can find this component at https://gitlab.cri.epita.fr/jeremie.graulle/esp-idf-cxx.
 
 ## *NOTE*
-This component is in a beta-release phase. Some bits that are still missing (non-exhaustive list):
-* Analog to Digital Converter (ADC)
+This component is in a beta-release phase. Some bits that are still missing.
 
 ## Requirements
 
