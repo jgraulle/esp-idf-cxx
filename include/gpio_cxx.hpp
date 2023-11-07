@@ -10,6 +10,10 @@
 
 #include "esp_exception.hpp"
 #include "system_cxx.hpp"
+#include "hal/gpio_types.h"
+
+#include <functional>
+
 
 namespace idf {
 
@@ -300,15 +304,24 @@ public:
  */
 class GPIOInput : public GPIOBase {
 public:
+    using CallBack = std::function<void()>;
+
     /**
      * @brief Construct and configure a GPIO as input.
      *
      * @param num GPIO pin number of the GPIO to be configured.
+     * @param intType GPIO interrupt type
+     * @param callback ISR handler function to call if intType not GPIO_INTR_DISABLE
      *
      * @throws GPIOException
      *              - if the underlying driver function fails
      */
-    GPIOInput(GPIONum num);
+    GPIOInput(GPIONum num, gpio_int_type_t intType = GPIO_INTR_DISABLE, const CallBack & callback = CallBack());
+
+    /**
+     * @brief If create with ISR handler remove it
+     */
+    ~GPIOInput();
 
     /**
      * @brief Read the current level of the GPIO.
@@ -339,6 +352,10 @@ public:
      * @throws GPIOException if the underlying driver function fails.
      */
     void wakeup_disable() const;
+
+private:
+    CallBack _callback;
+    static int _isrHandlerCount;
 };
 
 /**

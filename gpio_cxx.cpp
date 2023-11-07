@@ -153,9 +153,36 @@ GPIODriveStrength GPIOBase::get_drive_strength()
     return GPIODriveStrength(static_cast<uint32_t>(strength));
 }
 
-GPIOInput::GPIOInput(GPIONum num) : GPIOBase(num)
+GPIOInput::GPIOInput(GPIONum num, gpio_int_type_t intType, const CallBack & callback)
+    : GPIOBase(num)
+    , _callback()
 {
     GPIO_CHECK_THROW(gpio_set_direction(gpio_num.get_value<gpio_num_t>(), GPIO_MODE_INPUT));
+    GPIO_CHECK_THROW(gpio_set_intr_type(gpio_num.get_value<gpio_num_t>(), intType));
+    if (intType != GPIO_INTR_DISABLE)
+    {
+        if (!callback)
+            throw idf::ESPException(ESP_ERR_INVALID_ARG);
+        if (_isrHandlerCount == 0)
+            GPIO_CHECK_THROW(gpio_install_isr_service(0));
+        _isrHandlerCount++;
+        _callback = callback;
+        GPIO_CHECK_THROW(gpio_isr_handler_add(gpio_num.get_value<gpio_num_t>(), [](void * userCtx){
+            const GPIOInput * gpioInput = reinterpret_cast<const GPIOInput *>(userCtx);
+            return gpioInput->_callback();
+        }, this));
+    }
+}
+
+GPIOInput::~GPIOInput()
+{
+    if (_callback)
+    {
+        assert(gpio_isr_handler_remove(gpio_num.get_value<gpio_num_t>()) == ESP_OK);
+        _isrHandlerCount--;
+        if (_isrHandlerCount == 0)
+            gpio_uninstall_isr_service();
+    }
 }
 
 GPIOLevel GPIOInput::get_level() const noexcept
@@ -184,6 +211,8 @@ void GPIOInput::wakeup_disable() const
 {
     GPIO_CHECK_THROW(gpio_wakeup_disable(gpio_num.get_value<gpio_num_t>()));
 }
+
+int GPIOInput::_isrHandlerCount = 0;
 
 GPIO_OpenDrain::GPIO_OpenDrain(GPIONum num) : GPIOInput(num)
 {
