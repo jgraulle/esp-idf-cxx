@@ -5,7 +5,6 @@ This project is forked from https://github.com/espressif/esp-idf-cxx and provide
 ## *NOTE*
 This component is in a beta-release phase. Some bits that are still missing (non-exhaustive list):
 * Analog to Digital Converter (ADC)
-* Wifi
 
 ## Requirements
 

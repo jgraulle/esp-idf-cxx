@@ -2,8 +2,8 @@ idf_build_get_property(target IDF_TARGET)
 
 set(srcs "esp_timer_cxx.cpp" "esp_exception.cpp" "gpio_cxx.cpp" "i2c_cxx.cpp" "spi_cxx.cpp"
          "spi_host_cxx.cpp" "gptimer_cxx.cpp" "pulse_counter_cxx.cpp" "mcpwm_cxx.cpp"
-         "bdc_motor_cxx.cpp" "ledc_cxx.cpp")
-set(requires "esp_timer")
+         "bdc_motor_cxx.cpp" "ledc_cxx.cpp" "wifi_cxx.cpp")
+set(requires "esp_timer" "esp_wifi")
 
 if(NOT ${target} STREQUAL "linux")
     list(APPEND srcs
