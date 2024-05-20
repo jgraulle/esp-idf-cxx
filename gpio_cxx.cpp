@@ -185,14 +185,11 @@ GPIOInput::~GPIOInput()
     }
 }
 
-GPIOLevel GPIOInput::get_level() const noexcept
+bool GPIOInput::get_level() const noexcept
 {
-    int level = gpio_get_level(gpio_num.get_value<gpio_num_t>());
-    if (level) {
-        return GPIOLevel::HIGH;
-    } else {
-        return GPIOLevel::LOW;
-    }
+    static_assert(static_cast<bool>(1) == true);
+    static_assert(static_cast<bool>(0) == false);
+    return gpio_get_level(gpio_num.get_value<gpio_num_t>());
 }
 
 void GPIOInput::set_pull_mode(GPIOPullMode mode) const

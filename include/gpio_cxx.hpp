@@ -73,14 +73,6 @@ class GPIONumType;
 using GPIONum = GPIONumBase<class GPIONumType>;
 
 /**
- * Level of an input GPIO.
- */
-enum class GPIOLevel {
-    HIGH,
-    LOW
-};
-
-/**
  * Represents a valid pull up configuration for GPIOs.
  * It is supposed to resemble an enum type, hence it has static creation methods and a private constructor.
  * This class is a "Strong Value Type", see also the template class \c StrongValue for more properties.
@@ -326,9 +318,9 @@ public:
     /**
      * @brief Read the current level of the GPIO.
      *
-     * @return The GPIO current level of the GPIO.
+     * @return The True if the GPIO current level of the GPIO is high.
      */
-    GPIOLevel get_level() const noexcept;
+    bool get_level() const noexcept;
 
     /**
      * @brief Configure the internal pull-up and pull-down restors.
