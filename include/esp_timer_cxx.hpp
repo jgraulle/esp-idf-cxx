@@ -108,6 +108,20 @@ public:
         CHECK_THROW(esp_timer_stop(timer_handle));
     }
 
+    /**
+     * @brief Returns status of a timer, active or not
+     *
+     * This function is used to identify if the timer is still active or not.
+     *
+     * @return
+     *      - true if timer is still active
+     *      - false if timer is not active.
+     */
+    inline bool is_active()
+    {
+        return esp_timer_is_active(timer_handle);
+    }
+
 private:
     /**
      * Internal callback to hook into esp_timer component.
